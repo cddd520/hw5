@@ -79,7 +79,7 @@ bool scheduleHelper(const AvailabilityMatrix &avail, const size_t dailyNeed,
     // Worker must not already be working this day
     bool alreadyScheduled = false;
     if (std::find(sched[day].begin(), sched[day].begin() + col, worker) !=
-        sched[day].begin() + col) {w
+        sched[day].begin() + col) {
       alreadyScheduled = true;
     }
     if (alreadyScheduled)
