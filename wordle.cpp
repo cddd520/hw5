@@ -49,6 +49,7 @@ void wordleHelper(
         return;
     }
 
+    // store the possible answer
     if (index == current.size()) {
         if (floating.empty() && dict.find(current) != dict.end()) {
             results.insert(current);

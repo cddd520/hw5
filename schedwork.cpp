@@ -2,6 +2,10 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <iostream>
 // add or remove necessary headers as you please
 
 #endif
@@ -30,7 +34,6 @@ bool schedule(const AvailabilityMatrix &avail, const size_t dailyNeed,
   sched.clear();
 
   // Setup 1: Initialize schedule with dimensions N x D
-  // Loop 1 allowed
   for (size_t i = 0; i < avail.size(); i++) {
     std::vector<Worker_T> daySched(dailyNeed, INVALID_ID);
     sched.push_back(daySched);
@@ -38,8 +41,6 @@ bool schedule(const AvailabilityMatrix &avail, const size_t dailyNeed,
 
   // Setup 2: Initialize worker shift counts
   size_t numWorkers = avail[0].size();
-  // No explicit loop needed here (constructor does it), but counting it as
-  // setup is fine.
   std::vector<size_t> dailyCounts(numWorkers, 0);
 
   // Start recursion
@@ -65,22 +66,20 @@ bool scheduleHelper(const AvailabilityMatrix &avail, const size_t dailyNeed,
   size_t numWorkers = avail[0].size();
 
   // Recursive Step: Try to fill sched[day][col]
-  // Loop 2 allowed (Recursive search loop)
   for (Worker_T worker = 0; worker < numWorkers; worker++) {
 
-    // Constraint 1: Worker must be available
+    // Worker must be available
     if (!avail[day][worker])
       continue;
 
-    // Constraint 2: Worker must not exceed max shifts
+    // Worker must not exceed max shifts
     if (dailyCounts[worker] >= maxShifts)
       continue;
 
-    // Constraint 3: Worker must not already be working this day
-    // We only need to check the current day's filled slots (0 to col-1)
+    // Worker must not already be working this day
     bool alreadyScheduled = false;
     if (std::find(sched[day].begin(), sched[day].begin() + col, worker) !=
-        sched[day].begin() + col) {
+        sched[day].begin() + col) {w
       alreadyScheduled = true;
     }
     if (alreadyScheduled)
@@ -96,7 +95,7 @@ bool scheduleHelper(const AvailabilityMatrix &avail, const size_t dailyNeed,
       return true;
     }
 
-    // Backtrack (Undo Choice)
+    // Backtrack
     sched[day][col] = INVALID_ID;
     dailyCounts[worker]--;
   }
